@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study List</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-glow glow-left"></div>
+  <div class="page-glow glow-right"></div>
+
+  <main class="app-shell">
+    <nav class="top-nav" aria-label="Page sections">
+      <button class="nav-tab active" id="overview-tab" type="button" data-view="overview">Overview</button>
+      <button class="nav-tab" id="tasklist-tab" type="button" data-view="tasklist">Task List</button>
+    </nav>
+
+    <section class="page-view active" id="overview-view">
+      <section class="hero-card">
+        <p class="eyebrow">Study planner</p>
+        <h1>Keep every topic, task, and deadline in one happy little list.</h1>
+        <p class="subtitle">
+          Use the overview for motivation and your next exam, then open the task list page to focus on work.
+        </p>
+
+        <div class="hero-panels">
+          <div class="focus-panel">
+            <p class="panel-label">Study momentum</p>
+            <div class="progress-meter" aria-hidden="true">
+              <div class="progress-fill" id="overall-progress-fill"></div>
+            </div>
+            <p class="focus-score"><span id="overall-progress-text">0%</span> of your current study board complete</p>
+            <p class="focus-message" id="focus-message">Start with one small step and let the wins stack up.</p>
+          </div>
+
+          <div class="level-grid">
+            <div class="level-card accent-card">
+              <span class="level-kicker">XP</span>
+              <strong id="xp-count">0</strong>
+              <span>earned from completed study steps</span>
+            </div>
+            <div class="level-card">
+              <span class="level-kicker">Today</span>
+              <strong id="today-goal-count">0/3</strong>
+              <span>small steps toward your daily goal</span>
+            </div>
+            <div class="level-card">
+              <span class="level-kicker">Energy</span>
+              <strong id="energy-label">Warming up</strong>
+              <span id="energy-subtext">A few taps and this board will wake right up.</span>
+            </div>
+          </div>
+        </div>
+
+        <section class="exam-panel">
+          <div class="exam-copy">
+            <p class="panel-label">Exam countdowns</p>
+            <h2 class="exam-title" id="exam-title-display">No exams set yet</h2>
+            <p class="exam-subtitle" id="exam-subtitle">Add your exam dates and keep every finish line in sight.</p>
+          </div>
+
+          <div class="exam-count-card">
+            <span class="exam-count-number" id="exam-count-number">--</span>
+            <span class="exam-count-label" id="exam-count-label">next exam</span>
+          </div>
+
+          <form class="exam-form" id="exam-form">
+            <input id="exam-name" name="examName" type="text" maxlength="80" placeholder="Exam name: Biology Paper 1">
+            <input id="exam-date" name="examDate" type="date">
+            <button type="submit">Add exam</button>
+          </form>
+
+          <ul class="exam-list" id="exam-list" aria-live="polite"></ul>
+        </section>
+
+        <div class="stats" aria-live="polite">
+          <div class="stat-pill">
+            <span id="remaining-count">0</span>
+            <span>left to do</span>
+          </div>
+          <div class="stat-pill">
+            <span id="completed-count">0</span>
+            <span>completed</span>
+          </div>
+          <div class="stat-pill">
+            <span id="step-count">0</span>
+            <span>substeps done</span>
+          </div>
+          <div class="stat-pill">
+            <span id="steps-left-count">0</span>
+            <span>substeps left</span>
+          </div>
+          <div class="stat-pill">
+            <span id="total-steps-count">0</span>
+            <span>substeps total</span>
+          </div>
+        </div>
+
+        <button class="go-tasklist-button" id="go-tasklist-button" type="button">Open Task List</button>
+      </section>
+    </section>
+
+    <section class="page-view" id="tasklist-view">
+      <section class="hero-card task-entry-card">
+        <p class="eyebrow">Task list</p>
+        <h2 class="task-page-title">Add a study mission and break it into small steps.</h2>
+        <form class="todo-form" id="todo-form">
+          <label class="sr-only" for="task-input">Add a study task</label>
+          <input
+            id="task-input"
+            name="task"
+            type="text"
+            placeholder="Example: Finish biology flashcards"
+            maxlength="120"
+            autocomplete="off"
+            required
+          >
+          <label class="sr-only" for="task-subheading">Break the study task into smaller steps</label>
+          <textarea
+            id="task-subheading"
+            name="subheading"
+            placeholder="Optional breakdown: one smaller step per line"
+            maxlength="320"
+            rows="4"
+          ></textarea>
+          <button type="submit">Add task</button>
+        </form>
+      </section>
+
+      <section class="list-card">
+        <div class="list-head">
+          <h2>Your study list</h2>
+          <div class="list-head-actions">
+            <span class="mini-note" id="micro-message">Small progress still counts.</span>
+            <button class="ghost-button" id="clear-completed" type="button">Clear completed</button>
+          </div>
+        </div>
+
+        <ul class="todo-list" id="todo-list" aria-live="polite"></ul>
+      </section>
+    </section>
+
+    <template id="todo-item-template">
+      <li class="todo-item">
+        <button class="tick-button" type="button" aria-label="Mark task as complete"></button>
+        <div class="todo-copy">
+          <p class="todo-text"></p>
+          <p class="todo-progress"></p>
+          <div class="task-progress-bar" aria-hidden="true">
+            <div class="task-progress-fill"></div>
+          </div>
+          <ul class="subtask-list"></ul>
+          <form class="subtask-form">
+            <label class="sr-only">Add another smaller step</label>
+            <input class="subtask-input" type="text" maxlength="120" placeholder="Add another small step">
+            <button class="subtask-add-button" type="submit">Add step</button>
+          </form>
+          <span class="todo-badge">Study goal</span>
+        </div>
+        <button class="delete-button" type="button" aria-label="Delete task">Remove</button>
+      </li>
+    </template>
+  </main>
+
+  <div class="celebration-layer" id="celebration-layer" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
